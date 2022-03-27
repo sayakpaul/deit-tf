@@ -34,8 +34,8 @@ TODO
 
 **Pre-trained models**:
 
-* Off-the-shelf classification: [Colab Notebook](TODO)
-* Fine-tuning: [Colab Notebook](TODO)
+* Off-the-shelf classification: [Colab Notebook] (TODO)
+* Fine-tuning: [Colab Notebook] (TODO)
  
  **Randomly initialized models**:
  
