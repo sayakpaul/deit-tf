@@ -65,8 +65,9 @@ from scratch)
 
 ## References
 
-* DeiT paper: https://arxiv.org/abs/2012.12877
-* Official DeiT code: https://github.com/facebookresearch/deit
+[1] DeiT paper: https://arxiv.org/abs/2012.12877
+
+[2] Official DeiT code: https://github.com/facebookresearch/deit
 
 ## Acknowledgements
 
