@@ -1,4 +1,4 @@
-# DeiT-TF (Data Efficient Image Transformers)
+# DeiT-TF (Data-efficient Image Transformers)
 
 This repository provides TensorFlow / Keras implementations of different DeiT
 [1] variants from Touvron et al. It also provides the TensorFlow / Keras models that have been
