@@ -246,7 +246,7 @@ def main(args):
 
             idx += 1
 
-    print("Weight population successful, serializing TensorFlow model...")
+    print("Porting successful, serializing TensorFlow model...")
 
     save_path = os.path.join(TF_MODEL_ROOT, args.model_name)
     save_path = f"{save_path}_fe" if args.pre_logits else save_path
