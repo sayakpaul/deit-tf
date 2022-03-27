@@ -29,20 +29,19 @@ class ViTDistilled(ViTClassifier):
         )
 
         # Head layers.
-        self.head = (
-            layers.Dense(self.config.num_classes, name="classification_head")
-            if self.config.num_classes > 0
-            else tf.nn.identity
-        )
-        self.head_dist = (
-            layers.Dense(self.config.num_classes, name="distillation_head")
-            if self.config.num_classes > 0
-            else tf.nn.identity
-        )
-
-        self.distilled_training = (
-            False  # Must set this True to train w/ distillation token
-        )
+        if not self.config.pre_logits:
+            self.head = (
+                layers.Dense(
+                    self.config.num_classes, name="classification_head"
+                )
+                if self.config.num_classes > 0
+                else tf.nn.identity
+            )
+            self.head_dist = (
+                layers.Dense(self.config.num_classes, name="distillation_head")
+                if self.config.num_classes > 0
+                else tf.nn.identity
+            )
 
     def call(self, inputs, training=True):
         n = tf.shape(inputs)[0]
@@ -66,8 +65,9 @@ class ViTDistilled(ViTClassifier):
         )  # (B, number_patches, projection_dim)
         encoded_patches = self.dropout(encoded_patches)
 
-        if not training:
-            attention_scores = dict()
+        # Initialize a dictionary to store attention scores from each transformer
+        # block.
+        attention_scores = dict()
 
         # Iterate over the number of layers and stack up blocks of
         # Transformer.
@@ -76,17 +76,16 @@ class ViTDistilled(ViTClassifier):
             encoded_patches, attention_score = transformer_module(
                 encoded_patches
             )
-            if not training:
-                attention_scores[
-                    f"{transformer_module.name}_att"
-                ] = attention_score
+            attention_scores[f"{transformer_module.name}_att"] = attention_score
 
         # Final layer normalization.
         representation = self.layer_norm(encoded_patches)
 
         # Pool representation.
-        if self.pre_logits:
-            return (representation[:, 0] + representation[:, 1]) / 2
+        if self.config.pre_logits:
+            return (
+                representation[:, 0] + representation[:, 1]
+            ) / 2, attention_scores
 
         # Classification heads.
         else:
@@ -94,14 +93,11 @@ class ViTDistilled(ViTClassifier):
                 representation[:, 1]
             )
 
-            if self.distilled_training and training:
+            if "distilled" in self.config.name and training:
                 # Only return separate classification predictions when training in distilled mode.
-                return x, x_dist
+                return x, x_dist, attention_scores
 
-            elif training and not self.distilled_training:
-                return (x + x_dist) / 2
-
-            elif not (self.distilled_training and training):
+            else:
                 # During standard train / finetune, inference average the classifier predictions.
                 # Additionally, return the attention scores too.
                 return (x + x_dist) / 2, attention_scores

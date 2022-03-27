@@ -54,8 +54,11 @@ def main():
         num_layers = model_config.get("num_layers")
         num_heads = model_config.get("num_heads")
 
-        command = f"python convert.py -m {model_name} -r {image_sz} -p {patch_sz} -pd {proj_dim} -nl {num_layers} -nh {num_heads}"
-        os.system(command)
+        for i in range(2):
+            command = f"python convert.py -m {model_name} -r {image_sz} -p {patch_sz} -pd {proj_dim} -nl {num_layers} -nh {num_heads}"
+            if i == 1:
+                command += " -pl"
+            os.system(command)
 
 
 if __name__ == "__main__":
