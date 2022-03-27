@@ -22,7 +22,7 @@ Conversion utilities are in `convert.py`.
 
 The converted models will be available on on TF-Hub soon. 
 
-TODO: Code for summarizing for model.
+TODO: Code for summarizing a hub model.
 
 ## Results
 
