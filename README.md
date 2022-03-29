@@ -22,13 +22,25 @@ Conversion utilities are in `convert.py`.
 
 The converted models will be available on on TF-Hub soon. 
 
-TODO: Code for summarizing a hub model.
+TODO: Code for summarizing a TF-Hub model.
 
 ## Results
 
 Results are on ImageNet-1k validation set (top-1 accuracy). 
 
-TODO
+|    | **model_name**                       |   **top1_acc(%)** |   **top5_acc(%)** |   **orig_top1_acc(%)** |   **orig_top5_acc(%)** |
+|---:|:---------------------------------|--------------:|--------------:|-------------------:|-------------------:|
+|  0 | deit_tiny_patch16_224            |        72.136 |        91.128 |               72.2 |               91.1 |
+|  1 | deit_tiny_distilled_patch16_224  |        74.522 |        91.896 |               74.5 |               91.9 |
+|  2 | deit_small_patch16_224           |        79.828 |        94.954 |               79.9 |               95   |
+|  3 | deit_small_distilled_patch16_224 |        81.172 |        95.414 |               81.2 |               95.4 |
+|  4 | deit_base_patch16_224            |        81.798 |        95.592 |               81.8 |               95.6 |
+|  5 | deit_base_patch16_384            |        82.894 |        96.234 |               82.9 |               96.2 |
+|  6 | deit_base_distilled_patch16_224  |        83.326 |        96.496 |               83.4 |               96.5 |
+|  7 | deit_base_distilled_patch16_384  |        85.238 |        97.172 |               85.2 |               97.2 |
+
+Results can be verified with the code in `i1k_eval`. Original results were sourced from [2].
+
 
 ## Using the models
 
