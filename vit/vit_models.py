@@ -128,7 +128,6 @@ class ViTClassifier(keras.Model):
     def __init__(self, config: ml_collections.ConfigDict, **kwargs):
         super().__init__(**kwargs)
         self.config = config
-        self.pre_logits = False  # Set this true for feature extraction.
 
         # Patchify + embedding.
         self.projection = keras.Sequential(
@@ -189,14 +188,15 @@ class ViTClassifier(keras.Model):
         self.layer_norm = layers.LayerNormalization(
             epsilon=config.layer_norm_eps
         )
-        self.head = layers.Dense(
-            config.num_classes,
-            kernel_initializer="zeros",
-            dtype="float32",
-            name="classification_head",
-        )
+        if not self.config.pre_logits:
+            self.head = layers.Dense(
+                config.num_classes,
+                kernel_initializer="zeros",
+                dtype="float32",
+                name="classification_head",
+            )
 
-    def call(self, inputs, training=True):
+    def call(self, inputs, training=None):
         n = tf.shape(inputs)[0]
 
         # Create patches and project the patches.
@@ -217,8 +217,9 @@ class ViTClassifier(keras.Model):
         )  # (B, number_patches, projection_dim)
         encoded_patches = self.dropout(encoded_patches)
 
-        if not training:
-            attention_scores = dict()
+        # Initialize a dictionary to store attention scores from each transformer
+        # block.
+        attention_scores = dict()
 
         # Iterate over the number of layers and stack up blocks of
         # Transformer.
@@ -227,10 +228,7 @@ class ViTClassifier(keras.Model):
             encoded_patches, attention_score = transformer_module(
                 encoded_patches
             )
-            if not training:
-                attention_scores[
-                    f"{transformer_module.name}_att"
-                ] = attention_score
+            attention_scores[f"{transformer_module.name}_att"] = attention_score
 
         # Final layer normalization.
         representation = self.layer_norm(encoded_patches)
@@ -241,13 +239,10 @@ class ViTClassifier(keras.Model):
         elif self.config.classifier == "gap":
             encoded_patches = self.gap_layer(representation)
 
-        if self.pre_logits:
-            return encoded_patches
+        if self.config.pre_logits:
+            return encoded_patches, attention_scores
 
         # Classification head.
         else:
             output = self.head(encoded_patches)
-            if not training:
-                return output, attention_scores
-            else:
-                return output
+            return output, attention_scores

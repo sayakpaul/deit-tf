@@ -74,11 +74,21 @@ def parse_args():
         type=int,
         help="Number of attention heads.",
     )
+    parser.add_argument(
+        "-pl",
+        "--pre-logits",
+        action="store_true",
+        help="If we don't need the classification outputs.",
+    )
     return parser.parse_args()
 
 
 def main(args):
-    print(f"Converting {args.model_name}...")
+    if args.pre_logits:
+        print(f"Converting {args.model_name} for feature extraction...")
+    else:
+        print(f"Converting {args.model_name}...")
+
     print("Instantiating PyTorch model...")
     pt_model = timm.create_model(
         model_name=args.model_name, num_classes=1000, pretrained=True
@@ -99,9 +109,10 @@ def main(args):
     dummy_inputs = tf.ones((2, args.resolution, args.resolution, 3))
     _ = tf_model(dummy_inputs)[0]
 
-    assert tf_model.count_params() == sum(
-        p.numel() for p in pt_model.parameters()
-    )
+    if not args.pre_logits:
+        assert tf_model.count_params() == sum(
+            p.numel() for p in pt_model.parameters()
+        )
 
     # Load the PT params.
     pt_model_dict = pt_model.state_dict()
@@ -136,20 +147,21 @@ def main(args):
     )
 
     # Head layers.
-    head_layer = tf_model.get_layer("classification_head")
-    head_layer_idx = -2 if "distilled" in args.model_name else -1
-    tf_model.layers[-head_layer_idx] = helpers.modify_tf_block(
-        head_layer,
-        pt_model_dict["head.weight"],
-        pt_model_dict["head.bias"],
-    )
-    if "distilled" in args.model_name:
-        head_dist_layer = tf_model.get_layer("distillation_head")
-        tf_model.layers[-1] = helpers.modify_tf_block(
-            head_dist_layer,
-            pt_model_dict["head_dist.weight"],
-            pt_model_dict["head_dist.bias"],
+    if not args.pre_logits:
+        head_layer = tf_model.get_layer("classification_head")
+        head_layer_idx = -2 if "distilled" in args.model_name else -1
+        tf_model.layers[-head_layer_idx] = helpers.modify_tf_block(
+            head_layer,
+            pt_model_dict["head.weight"],
+            pt_model_dict["head.bias"],
         )
+        if "distilled" in args.model_name:
+            head_dist_layer = tf_model.get_layer("distillation_head")
+            tf_model.layers[-1] = helpers.modify_tf_block(
+                head_dist_layer,
+                pt_model_dict["head_dist.weight"],
+                pt_model_dict["head_dist.bias"],
+            )
 
     # Transformer blocks.
     idx = 0
@@ -234,9 +246,10 @@ def main(args):
 
             idx += 1
 
-    print("Weight population successful, serializing TensorFlow model...")
+    print("Porting successful, serializing TensorFlow model...")
 
     save_path = os.path.join(TF_MODEL_ROOT, args.model_name)
+    save_path = f"{save_path}_fe" if args.pre_logits else save_path
     tf_model.save(save_path)
     print(f"TensorFlow model serialized to: {save_path}...")
 

@@ -11,6 +11,7 @@ def get_config(
     init_values: float = None,
     dropout_rate: float = 0.0,
     drop_path_rate: float = 0.0,
+    pre_logits: bool = False,
 ) -> ml_collections.ConfigDict:
     """Default initialization refers to deit_tiny_patch16_224 for ImageNet-1k.
 
@@ -39,5 +40,7 @@ def get_config(
     config.classifier = "token"
     config.init_values = init_values
     config.drop_path_rate = drop_path_rate
+
+    config.pre_logits = pre_logits
 
     return config.lock()

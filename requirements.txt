@@ -1,0 +1,4 @@
+timm==0.5.4
+torch==1.11.0
+tensorflow==2.8.0
+ml_collections==0.1.1
