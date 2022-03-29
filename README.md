@@ -46,7 +46,7 @@ Results can be verified with the code in `i1k_eval`. Original results were sourc
 
 **Pre-trained models**:
 
-* Off-the-shelf classification: [Colab Notebook] (TODO)
+* Off-the-shelf classification: [Colab Notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb)
 * Fine-tuning: [Colab Notebook] (TODO)
  
  **Randomly initialized models**:
@@ -83,5 +83,6 @@ from scratch)
 
 ## Acknowledgements
 
-* [`timm` library source code](https://github.com/rwightman/pytorch-image-models)
-* [ML-GDE program](https://developers.google.com/programs/experts/)
+* [Aritra Roy Gosthipaty] who was instrumental in implementing some parts of the core ViT module (`vit.vit-models`) for another project.
+* [`timm` library source code](https://github.com/rwightman/pytorch-image-models) for the awesome codebase.
+* [ML-GDE program](https://developers.google.com/programs/experts/) for providing GCP credits that supported my experiments.
