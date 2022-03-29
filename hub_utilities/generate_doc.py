@@ -11,7 +11,7 @@ import attr
 template = Template(
     """# Module $HANDLE
 
-Fine-tunable model pre-trained on the $DATASET_DESCRIPTION.
+DeiT model pre-trained on the $DATASET_DESCRIPTION suitable for off-the-shelf classification.
 
 <!-- asset-path: https://storage.googleapis.com/deit-tf/tars/$ARCHIVE_NAME.tar.gz  -->
 <!-- task: image-classification -->
@@ -19,14 +19,14 @@ Fine-tunable model pre-trained on the $DATASET_DESCRIPTION.
 <!-- format: saved_model_2 -->
 <!-- fine-tunable: true -->
 <!-- license: mit -->
-<!-- colab: https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/finetune.ipynb -->
+<!-- colab: https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb -->
 
 ## Overview
 
 This model is a DeiT [1] model pre-trained on the $DATASET_DESCRIPTION. You can find the complete
-collection of DeiT models on TF-Hub on [this page](https://tfhub.dev/sayakpaul/collections/DeiT/1).
+collection of DeiT models on TF-Hub on [this page](https://tfhub.dev/sayakpaul/collections/deit/1).
 
-You can use this model for feature extraction as well as fine-tuning. Please refer to
+You can use this model for performing off-the-shelf classification. Please refer to
 the Colab Notebook linked on this page for more details.
 
 ## Notes
@@ -63,10 +63,10 @@ class Config:
         return f"{self.single_resolution}x{self.single_resolution}"
 
     def gcs_folder_name(self):
-        return f"deit_{self.size}_patch16_{self.single_resolution}_fe"
+        return f"deit_{self.size}_patch16_{self.single_resolution}"
 
     def handle(self):
-        return f"sayakpaul/{self.gcs_folder_name()}/1"
+        return f"sayakpaul/deit_{self.size}_{self.dataset}_{self.single_resolution}/1"
 
     def rel_doc_file_path(self):
         """Relative to the tfhub.dev directory."""
