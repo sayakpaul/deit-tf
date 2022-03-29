@@ -47,7 +47,7 @@ Results can be verified with the code in `i1k_eval`. Original results were sourc
 **Pre-trained models**:
 
 * Off-the-shelf classification: [Colab Notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb)
-* Fine-tuning: [Colab Notebook] (TODO)
+* Fine-tuning: [Colab Notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/finetune.ipynb)
  
  **Randomly initialized models**:
  
