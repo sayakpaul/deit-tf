@@ -1,0 +1,7 @@
+model_name,top1_acc(%),top5_acc(%)
+deit_base_distilled_patch16_224/,83.326,96.496
+deit_base_patch16_224/,81.798,95.592
+deit_small_distilled_patch16_224/,81.172,95.414
+deit_small_patch16_224/,79.828,94.954
+deit_tiny_distilled_patch16_224/,74.522,91.896
+deit_tiny_patch16_224/,72.136,91.128

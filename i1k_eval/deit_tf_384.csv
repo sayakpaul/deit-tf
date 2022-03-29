@@ -1,0 +1,3 @@
+model_name,top1_acc(%),top5_acc(%)
+deit_base_distilled_patch16_384/,85.238,97.172
+deit_base_patch16_384/,82.894,96.234
