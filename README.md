@@ -48,6 +48,10 @@ Results can be verified with the code in `i1k_eval`. Original results were sourc
 
 * Off-the-shelf classification: [Colab Notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb)
 * Fine-tuning: [Colab Notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/finetune.ipynb)
+
+These models also output attention weights from each of the Transformer blocks.
+Refer to [this notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb)
+for more details.
  
  **Randomly initialized models**:
  
@@ -71,8 +75,8 @@ print(deit_tiny_distilled_patch16_224.summary(expand_nested=True))
 
 - [ ] Align layer initializers (useful if someone wanted to train the models
 from scratch) 
-- [ ] Fine-tuning notebook 
-- [ ] Off-the-shelf-classification notebook
+- [x] Fine-tuning notebook 
+- [x] Off-the-shelf-classification notebook
 - [ ] Publish models on TF-Hub
 
 ## References
@@ -83,6 +87,9 @@ from scratch)
 
 ## Acknowledgements
 
-* [Aritra Roy Gosthipaty] who was instrumental in implementing some parts of the core ViT module (`vit.vit-models`) for another project.
-* [`timm` library source code](https://github.com/rwightman/pytorch-image-models) for the awesome codebase.
-* [ML-GDE program](https://developers.google.com/programs/experts/) for providing GCP credits that supported my experiments.
+* [Aritra Roy Gosthipaty](https://github.com/ariG23498) who was instrumental in implementing
+some parts of the core ViT module (`vit.vit_models`) for another project.
+* [`timm` library source code](https://github.com/rwightman/pytorch-image-models)
+for the awesome codebase.
+* [ML-GDE program](https://developers.google.com/programs/experts/) for
+providing GCP credits that supported my experiments.
