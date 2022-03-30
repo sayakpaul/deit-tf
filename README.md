@@ -38,7 +38,7 @@ print(model.summary(expand_nested=True))
 
 Results are on ImageNet-1k validation set (top-1 accuracy). 
 
-|    | **model_name**                       |   **top1_acc(%)** |   **top5_acc(%)** |   **orig_top1_acc(%)** |   **orig_top5_acc(%)** |
+|    | **model_name**                   |   **top1_acc(%)** |   **top5_acc(%)** |   **orig_top1_acc(%)** |   **orig_top5_acc(%)** |
 |---:|:---------------------------------|--------------:|--------------:|-------------------:|-------------------:|
 |  0 | deit_tiny_patch16_224            |        72.136 |        91.128 |               72.2 |               91.1 |
 |  1 | deit_tiny_distilled_patch16_224  |        74.522 |        91.896 |               74.5 |               91.9 |
@@ -61,7 +61,11 @@ Results can be verified with the code in `i1k_eval`. Original results were sourc
 
 These models also output attention weights from each of the Transformer blocks.
 Refer to [this notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb)
-for more details.
+for more details. Additionally, the notebook shows how to visualize the attention maps for a given image.
+
+<div align=center>
+ <img src="https://i.ibb.co/hHzggDr/attention-map.png" width=700/>
+</div>
  
  **Randomly initialized models**:
  
