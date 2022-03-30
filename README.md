@@ -63,9 +63,13 @@ These models also output attention weights from each of the Transformer blocks.
 Refer to [this notebook](https://colab.research.google.com/github/sayakpaul/deit-tf/blob/main/notebooks/classification.ipynb)
 for more details. Additionally, the notebook shows how to visualize the attention maps for a given image.
 
+<br>
+
 <div align=center>
  <img src="https://i.ibb.co/hHzggDr/attention-map.png" width=700/>
 </div>
+
+<br>
  
  **Randomly initialized models**:
  
