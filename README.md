@@ -13,6 +13,15 @@ repository.
 Refer to the ["Using the models"](https://github.com/sayakpaul/deit-tf#using-the-models)
 section to get started. 
 
+## Table of contents
+
+* [Conversion](https://github.com/sayakpaul/deit-tf#conversion)
+* [Collection of pre-trained models (converted from PyTorch to TensorFlow)](https://github.com/sayakpaul/deit-tf#models)
+* [Results of the converted models](https://github.com/sayakpaul/deit-tf#results)
+* [How to use the models?](https://github.com/sayakpaul/deit-tf#using-the-models)
+* [References](https://github.com/sayakpaul/deit-tf#references)
+* [Acknowledgements](https://github.com/sayakpaul/deit-tf#references)
+
 ## Conversion
 
 TensorFlow / Keras implementations are available in `vit/vit_models.py` and `vit/deit_models.py`.
