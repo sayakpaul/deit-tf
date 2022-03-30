@@ -87,7 +87,7 @@ print(deit_tiny_distilled_patch16_224.summary(expand_nested=True))
 from scratch) 
 - [x] Fine-tuning notebook 
 - [x] Off-the-shelf-classification notebook
-- [ ] Publish models on TF-Hub
+- [x] Publish models on TF-Hub
 
 ## References
 
