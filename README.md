@@ -20,9 +20,19 @@ Conversion utilities are in `convert.py`.
 
 ## Models
 
-The converted models will be available on on TF-Hub soon. 
+Find the models on TF-Hub here: https://tfhub.dev/sayakpaul/collections/deit/1. You can fully inspect the
+model architecture like so:
 
-TODO: Code for summarizing a TF-Hub model.
+```py
+import tensorflow as tf
+
+model_gcs_path = "gs://tfhub-modules/sayakpaul/deit_tiny_patch16_224/1/uncompressed"
+model = tf.keras.models.load_model(model_gcs_path)
+
+dummy_inputs = tf.ones((2, 224, 224, 3))
+_ = model(dummy_inputs)
+print(model.summary(expand_nested=True))
+```
 
 ## Results
 
