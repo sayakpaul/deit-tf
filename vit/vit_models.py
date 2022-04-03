@@ -84,7 +84,7 @@ def transformer(config: ConfigDict, name: str, drop_prob=0.0) -> keras.Model:
         x3, hidden_units=config.mlp_units, dropout_rate=config.dropout_rate
     )
     x4 = LayerScale(config)(x4) if config.init_values else x4
-    x4 = StochasticDepth(drop_prob)(attention_output) if drop_prob else x4
+    x4 = StochasticDepth(drop_prob)(x4) if drop_prob else x4
 
     # Skip connection 2.
     outputs = layers.Add()([x2, x4])
