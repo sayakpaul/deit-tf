@@ -4,6 +4,7 @@ Reference:
 """
 
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras import layers
 
 from .vit_models import ViTClassifier
@@ -15,10 +16,13 @@ class ViTDistilled(ViTClassifier):
         self.num_tokens = 2
 
         # CLS and distillation tokens, positional embedding.
-        init_value = tf.zeros((1, 1, self.config.projection_dim))
+        init_scheme = keras.initializers.TruncatedNormal(
+            stddev=self.config.initializer_range
+        )
+        init_value = init_scheme((1, 1, self.config.projection_dim))
         self.dist_token = tf.Variable(init_value, name="dist_token")
         self.positional_embedding = tf.Variable(
-            tf.zeros(
+            init_scheme(
                 (
                     1,
                     self.config.num_patches + self.num_tokens,
@@ -32,13 +36,19 @@ class ViTDistilled(ViTClassifier):
         if not self.config.pre_logits:
             self.head = (
                 layers.Dense(
-                    self.config.num_classes, name="classification_head"
+                    self.config.num_classes,
+                    kernel_initializer="zeros",
+                    name="classification_head",
                 )
                 if self.config.num_classes > 0
                 else tf.nn.identity
             )
             self.head_dist = (
-                layers.Dense(self.config.num_classes, name="distillation_head")
+                layers.Dense(
+                    self.config.num_classes,
+                    kernel_initializer="zeros",
+                    name="distillation_head",
+                )
                 if self.config.num_classes > 0
                 else tf.nn.identity
             )

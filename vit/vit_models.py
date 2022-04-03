@@ -26,7 +26,6 @@ def mlp(x: int, dropout_rate: float, hidden_units: List[int]):
         x = layers.Dense(
             units,
             activation=tf.nn.gelu if idx == 0 else None,
-            kernel_initializer="glorot_uniform",
             bias_initializer=keras.initializers.RandomNormal(stddev=1e-6),
         )(x)
         x = layers.Dropout(dropout_rate)(x)
@@ -109,6 +108,7 @@ class ViTClassifier(keras.Model):
                     strides=(config.patch_size, config.patch_size),
                     padding="VALID",
                     name="conv_projection",
+                    kernel_initializer="lecun_normal",
                 ),
                 layers.Reshape(
                     target_shape=(config.num_patches, config.projection_dim),
@@ -119,17 +119,19 @@ class ViTClassifier(keras.Model):
         )
 
         # Positional embedding.
-        init_value = tf.ones(
-            (
-                1,
-                config.num_patches + 1
-                if self.config.classifier == "token"
-                else config.num_patches,
-                config.projection_dim,
-            )
+        init_scheme = keras.initializers.TruncatedNormal(
+            stddev=config.initializer_range
         )
+        init_shape = (
+            1,
+            config.num_patches + 1
+            if self.config.classifier == "token"
+            else config.num_patches,
+            config.projection_dim,
+        )
+
         self.positional_embedding = tf.Variable(
-            init_value, name="pos_embedding"
+            init_scheme(init_shape), name="pos_embedding"
         )  # This will be loaded with the pre-trained positional embeddings later.
 
         # Transformer blocks.
@@ -146,7 +148,8 @@ class ViTClassifier(keras.Model):
 
         # CLS token or GAP.
         if config.classifier == "token":
-            initial_value = tf.zeros((1, 1, config.projection_dim))
+            init_scheme = keras.initializers.RandomNormal(stddev=1e-6)
+            initial_value = init_scheme((1, 1, config.projection_dim))
             self.cls_token = tf.Variable(
                 initial_value=initial_value, trainable=True, name="cls"
             )
