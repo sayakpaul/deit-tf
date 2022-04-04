@@ -19,8 +19,9 @@ section to get started.
 * [Collection of pre-trained models (converted from PyTorch to TensorFlow)](https://github.com/sayakpaul/deit-tf#models)
 * [Results of the converted models](https://github.com/sayakpaul/deit-tf#results)
 * [How to use the models?](https://github.com/sayakpaul/deit-tf#using-the-models)
+* [Training with DeiT](https://github.com/sayakpaul/deit-tf#training-with-deit)
 * [References](https://github.com/sayakpaul/deit-tf#references)
-* [Acknowledgements](https://github.com/sayakpaul/deit-tf#references)
+* [Acknowledgements](https://github.com/sayakpaul/deit-tf#acknowledgements)
 
 ## Conversion
 
@@ -80,9 +81,9 @@ for more details. Additionally, the notebook shows how to visualize the attentio
 
 <br>
  
- **Randomly initialized models**:
+**Randomly initialized models**:
  
- ```py
+```py
 from vit.model_configs import base_config
 from vit.deit_models import ViTDistilled
  
@@ -94,17 +95,17 @@ deit_tiny_distilled_patch16_224 = ViTDistilled(distilled_tiny_tf_config)
 dummy_inputs = tf.ones((2, 224, 224, 3))
 _ = deit_tiny_distilled_patch16_224(dummy_inputs)
 print(deit_tiny_distilled_patch16_224.summary(expand_nested=True))
- ```
- 
- To view different model configurations, refer to `convert_all_models.py`.
- 
-## Upcoming (contributions welcome)
+```
 
-- [ ] Align layer initializers (useful if someone wanted to train the models
-from scratch) 
-- [x] Fine-tuning notebook 
-- [x] Off-the-shelf-classification notebook
-- [x] Publish models on TF-Hub
+To view different model configurations, refer to `convert_all_models.py`.
+
+
+## Training with DeiT
+
+You can refer to the `notebooks/deit-trainer.ipynb` notebok to get a sense of how distillation
+is actually performed using DeiT. Additionally, that notebook also provides code in case you
+wanted to train a model from scratch instead of distillation.
+ 
 
 ## References
 
