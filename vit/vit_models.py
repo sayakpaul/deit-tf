@@ -8,12 +8,14 @@ Reference:
 
 from typing import List
 
-import ml_collections
 import tensorflow as tf
+from ml_collections import ConfigDict
 from tensorflow import keras
 from tensorflow.keras import layers
 
+from .layers.ls import LayerScale
 from .layers.mha import TFViTAttention
+from .layers.sd import StochasticDepth
 
 
 def mlp(x: int, dropout_rate: float, hidden_units: List[int]):
@@ -24,45 +26,13 @@ def mlp(x: int, dropout_rate: float, hidden_units: List[int]):
         x = layers.Dense(
             units,
             activation=tf.nn.gelu if idx == 0 else None,
-            kernel_initializer="glorot_uniform",
             bias_initializer=keras.initializers.RandomNormal(stddev=1e-6),
         )(x)
         x = layers.Dropout(dropout_rate)(x)
     return x
 
 
-# Referred from: github.com:rwightman/pytorch-image-models.
-class StochasticDepth(layers.Layer):
-    def __init__(self, drop_prop, **kwargs):
-        super(StochasticDepth, self).__init__(**kwargs)
-        self.drop_prob = drop_prop
-
-    def call(self, x, training=None):
-        if training:
-            keep_prob = 1 - self.drop_prob
-            shape = (tf.shape(x)[0],) + (1,) * (len(tf.shape(x)) - 1)
-            random_tensor = keep_prob + tf.random.uniform(shape, 0, 1)
-            random_tensor = tf.floor(random_tensor)
-            return (x / keep_prob) * random_tensor
-        return x
-
-
-# Referred from: github.com:rwightman/pytorch-image-models.
-class LayerScale(layers.Layer):
-    def __init__(self, config: ml_collections.ConfigDict, **kwargs):
-        super().__init__(**kwargs)
-        self.gamma = tf.Variable(
-            config.init_values * tf.ones((config.projection_dim,)),
-            name="layer_scale",
-        )
-
-    def call(self, x):
-        return x * self.gamma
-
-
-def transformer(
-    config: ml_collections.ConfigDict, name: str, drop_prob=0.0
-) -> keras.Model:
+def transformer(config: ConfigDict, name: str, drop_prob=0.0) -> keras.Model:
     """Transformer block with pre-norm."""
     num_patches = (
         config.num_patches + 2
@@ -114,7 +84,7 @@ def transformer(
         x3, hidden_units=config.mlp_units, dropout_rate=config.dropout_rate
     )
     x4 = LayerScale(config)(x4) if config.init_values else x4
-    x4 = StochasticDepth(drop_prob)(attention_output) if drop_prob else x4
+    x4 = StochasticDepth(drop_prob)(x4) if drop_prob else x4
 
     # Skip connection 2.
     outputs = layers.Add()([x2, x4])
@@ -125,7 +95,7 @@ def transformer(
 class ViTClassifier(keras.Model):
     """Vision Transformer base class."""
 
-    def __init__(self, config: ml_collections.ConfigDict, **kwargs):
+    def __init__(self, config: ConfigDict, **kwargs):
         super().__init__(**kwargs)
         self.config = config
 
@@ -138,6 +108,7 @@ class ViTClassifier(keras.Model):
                     strides=(config.patch_size, config.patch_size),
                     padding="VALID",
                     name="conv_projection",
+                    kernel_initializer="lecun_normal",
                 ),
                 layers.Reshape(
                     target_shape=(config.num_patches, config.projection_dim),
@@ -148,17 +119,19 @@ class ViTClassifier(keras.Model):
         )
 
         # Positional embedding.
-        init_value = tf.ones(
-            (
-                1,
-                config.num_patches + 1
-                if self.config.classifier == "token"
-                else config.num_patches,
-                config.projection_dim,
-            )
+        init_scheme = keras.initializers.TruncatedNormal(
+            stddev=config.initializer_range
         )
+        init_shape = (
+            1,
+            config.num_patches + 1
+            if self.config.classifier == "token"
+            else config.num_patches,
+            config.projection_dim,
+        )
+
         self.positional_embedding = tf.Variable(
-            init_value, name="pos_embedding"
+            init_scheme(init_shape), name="pos_embedding"
         )  # This will be loaded with the pre-trained positional embeddings later.
 
         # Transformer blocks.
@@ -175,7 +148,8 @@ class ViTClassifier(keras.Model):
 
         # CLS token or GAP.
         if config.classifier == "token":
-            initial_value = tf.zeros((1, 1, config.projection_dim))
+            init_scheme = keras.initializers.RandomNormal(stddev=1e-6)
+            initial_value = init_scheme((1, 1, config.projection_dim))
             self.cls_token = tf.Variable(
                 initial_value=initial_value, trainable=True, name="cls"
             )

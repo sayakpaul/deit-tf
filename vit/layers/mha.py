@@ -24,27 +24,9 @@ class TFViTSelfAttention(keras.layers.Layer):
         self.all_head_size = self.num_attention_heads * self.attention_head_size
         self.sqrt_att_head_size = math.sqrt(self.attention_head_size)
 
-        self.query = keras.layers.Dense(
-            units=self.all_head_size,
-            kernel_initializer=keras.initializers.TruncatedNormal(
-                stddev=config.initializer_range
-            ),
-            name="query",
-        )
-        self.key = keras.layers.Dense(
-            units=self.all_head_size,
-            kernel_initializer=keras.initializers.TruncatedNormal(
-                stddev=config.initializer_range
-            ),
-            name="key",
-        )
-        self.value = keras.layers.Dense(
-            units=self.all_head_size,
-            kernel_initializer=keras.initializers.TruncatedNormal(
-                stddev=config.initializer_range
-            ),
-            name="value",
-        )
+        self.query = keras.layers.Dense(units=self.all_head_size, name="query")
+        self.key = keras.layers.Dense(units=self.all_head_size, name="key")
+        self.value = keras.layers.Dense(units=self.all_head_size, name="value")
         self.dropout = keras.layers.Dropout(rate=config.dropout_rate)
 
     def transpose_for_scores(
@@ -124,11 +106,7 @@ class TFViTSelfOutput(keras.layers.Layer):
         super().__init__(**kwargs)
 
         self.dense = keras.layers.Dense(
-            units=config.projection_dim,
-            kernel_initializer=keras.initializers.TruncatedNormal(
-                stddev=config.initializer_range
-            ),
-            name="dense",
+            units=config.projection_dim, name="dense"
         )
         self.dropout = keras.layers.Dropout(rate=config.dropout_rate)
 
