@@ -150,7 +150,7 @@ def main(args):
     if not args.pre_logits:
         head_layer = tf_model.get_layer("classification_head")
         head_layer_idx = -2 if "distilled" in args.model_name else -1
-        tf_model.layers[-head_layer_idx] = helpers.modify_tf_block(
+        tf_model.layers[head_layer_idx] = helpers.modify_tf_block(
             head_layer,
             pt_model_dict["head.weight"],
             pt_model_dict["head.bias"],
