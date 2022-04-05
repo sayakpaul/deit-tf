@@ -31,7 +31,7 @@ Conversion utilities are in `convert.py`.
 ## Models
 
 Find the models on TF-Hub here: https://tfhub.dev/sayakpaul/collections/deit/1. You can fully inspect the
-model architecture like so:
+architecture of the TF-Hub models like so:
 
 ```py
 import tensorflow as tf
