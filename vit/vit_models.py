@@ -111,7 +111,7 @@ class ViTClassifier(keras.Model):
                     kernel_initializer="lecun_normal",
                 ),
                 layers.Reshape(
-                    target_shape=(config.num_patches, config.projection_dim),
+                    target_shape=(-1, config.projection_dim),
                     name="flatten_projection",
                 ),
             ],
