@@ -51,7 +51,7 @@ def transformer(config: ConfigDict, name: str, drop_prob=0.0) -> keras.Model:
         ), "Distillation token is not suitable for GAP."
         num_patches = config.num_patches + 0
 
-    encoded_patches = layers.Input((num_patches, config.projection_dim))
+    encoded_patches = layers.Input((None, config.projection_dim))
 
     # Layer normalization 1.
     x1 = layers.LayerNormalization(epsilon=config.layer_norm_eps)(
