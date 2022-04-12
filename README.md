@@ -11,7 +11,7 @@ As of today, all the TensorFlow / Keras variants of the **DeiT** models listed
 repository.
 
 Refer to the ["Using the models"](https://github.com/sayakpaul/deit-tf#using-the-models)
-section to get started. 
+section to get started. You can also follow along with this tutorial: https://keras.io/examples/vision/deit/.
 
 ## Table of contents
 
