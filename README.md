@@ -87,7 +87,7 @@ for more details. Additionally, the notebook shows how to visualize the attentio
 from vit.model_configs import base_config
 from vit.deit_models import ViTDistilled
  
- distilled_tiny_tf_config = base_config.get_config(
+distilled_tiny_tf_config = base_config.get_config(
     name="deit_tiny_distilled_patch16_224"
 )
 deit_tiny_distilled_patch16_224 = ViTDistilled(distilled_tiny_tf_config)
