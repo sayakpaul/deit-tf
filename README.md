@@ -13,6 +13,10 @@ repository.
 Refer to the ["Using the models"](https://github.com/sayakpaul/deit-tf#using-the-models)
 section to get started. You can also follow along with this tutorial: https://keras.io/examples/vision/deit/.
 
+**Updates**
+
+* April 22, 2022: This project won the [#TFCommunitySpotlight award](https://twitter.com/TensorFlow/status/1516869315517198337).
+
 ## Table of contents
 
 * [Conversion](https://github.com/sayakpaul/deit-tf#conversion)
