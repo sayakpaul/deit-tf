@@ -90,6 +90,8 @@ for more details. Additionally, the notebook shows how to visualize the attentio
 ```py
 from vit.model_configs import base_config
 from vit.deit_models import ViTDistilled
+
+import tensorflow as tf
  
 distilled_tiny_tf_config = base_config.get_config(
     name="deit_tiny_distilled_patch16_224"
