@@ -103,6 +103,14 @@ _ = deit_tiny_distilled_patch16_224(dummy_inputs)
 print(deit_tiny_distilled_patch16_224.summary(expand_nested=True))
 ```
 
+To initialize a network with say, 5 classes do:
+
+```py
+with distilled_tiny_tf_config.unlocked():
+    distilled_tiny_tf_config.num_classes = 5
+deit_tiny_distilled_patch16_224 = ViTDistilled(distilled_tiny_tf_config)
+```
+
 To view different model configurations, refer to `convert_all_models.py`.
 
 
