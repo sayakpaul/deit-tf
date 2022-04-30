@@ -15,6 +15,7 @@ section to get started. You can also follow along with this tutorial: https://ke
 
 **Updates**
 
+* April 29, 2022: This project received the [Google OSS Expert prize](https://www.kaggle.com/discussions/general/322041).
 * April 22, 2022: This project won the [#TFCommunitySpotlight award](https://twitter.com/TensorFlow/status/1516869315517198337).
 
 ## Table of contents
